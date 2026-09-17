@@ -143,28 +143,28 @@
   }
 }
 
-/* Streak — dark ember design system (app is dark by default) */
+/* Streak — midnight violet design system (app is dark by default) */
 :root {
   --radius: 1rem;
-  --background: oklch(0.17 0.015 60);
-  --foreground: oklch(0.96 0.01 80);
-  --card: oklch(0.22 0.018 60);
-  --card-foreground: oklch(0.96 0.01 80);
-  --popover: oklch(0.22 0.018 60);
-  --popover-foreground: oklch(0.96 0.01 80);
-  --primary: oklch(0.72 0.19 48);
-  --primary-foreground: oklch(0.18 0.02 60);
-  --secondary: oklch(0.27 0.02 60);
-  --secondary-foreground: oklch(0.96 0.01 80);
-  --muted: oklch(0.26 0.015 60);
-  --muted-foreground: oklch(0.72 0.02 70);
-  --accent: oklch(0.68 0.16 245);
-  --accent-foreground: oklch(0.97 0.01 250);
-  --destructive: oklch(0.6 0.2 25);
-  --destructive-foreground: oklch(0.97 0.01 80);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.72 0.19 48);
+  --background: oklch(0.16 0.03 292);
+  --foreground: oklch(0.96 0.01 300);
+  --card: oklch(0.21 0.045 292);
+  --card-foreground: oklch(0.96 0.01 300);
+  --popover: oklch(0.21 0.045 292);
+  --popover-foreground: oklch(0.96 0.01 300);
+  --primary: oklch(0.66 0.22 292);
+  --primary-foreground: oklch(0.98 0.01 300);
+  --secondary: oklch(0.27 0.05 292);
+  --secondary-foreground: oklch(0.96 0.01 300);
+  --muted: oklch(0.26 0.04 292);
+  --muted-foreground: oklch(0.74 0.04 295);
+  --accent: oklch(0.82 0.11 300);
+  --accent-foreground: oklch(0.2 0.05 292);
+  --destructive: oklch(0.6 0.2 20);
+  --destructive-foreground: oklch(0.97 0.01 300);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.66 0.22 292);
 }
 
 @theme inline {
@@ -175,9 +175,9 @@
 body {
   font-family: var(--font-sans);
   background-image:
-    radial-gradient(circle at 85% 5%, oklch(0.55 0.17 250 / 30%), transparent 60%),
-    radial-gradient(ellipse at 50% 110%, oklch(0.5 0.14 245 / 22%), transparent 65%),
-    radial-gradient(circle at 15% -10%, oklch(0.72 0.19 48 / 16%), transparent 55%);
+    radial-gradient(circle at 85% 5%, oklch(0.6 0.22 292 / 34%), transparent 60%),
+    radial-gradient(ellipse at 50% 110%, oklch(0.68 0.16 305 / 22%), transparent 65%),
+    radial-gradient(circle at 12% -10%, oklch(0.55 0.18 275 / 24%), transparent 55%);
   background-attachment: fixed;
 }
 
