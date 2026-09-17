@@ -89,9 +89,11 @@ function Index() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
       if (raw) setHabits(JSON.parse(raw) as Habit[]);
-      setReminder(localStorage.getItem(REMINDER_KEY) ?? "");
+      setReminder(
+        localStorage.getItem(REMINDER_KEY) ?? localStorage.getItem(LEGACY_REMINDER_KEY) ?? "",
+      );
     } catch {
       /* ignore */
     }
