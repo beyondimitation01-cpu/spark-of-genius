@@ -102,7 +102,14 @@ def main():
     findings = []
     for idx, chunk in enumerate(chunks, 1):
         print(f"Scanning chunk {idx}/{len(chunks)}...", file=sys.stderr)
-        result = call_ai_structured(chunk, SCHEMA, system=SYSTEM, model=MODEL)
+        result = call_ai_structured(
+            chunk,
+            SCHEMA["name"],
+            SCHEMA["description"],
+            SCHEMA["parameters"],
+            system=SYSTEM,
+            model=MODEL,
+        )
         findings.extend(result.get("findings", []))
 
     if args.as_json:
