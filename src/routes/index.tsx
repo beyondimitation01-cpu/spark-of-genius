@@ -32,8 +32,6 @@ type Habit = {
 
 const STORAGE_KEY = "streak:habits:v1";
 const REMINDER_KEY = "streak:reminder:v1";
-const LEGACY_STORAGE_KEY = "racha:habits:v1";
-const LEGACY_REMINDER_KEY = "racha:reminder:v1";
 
 const EMOJIS = ["🔥", "📚", "🏃", "🧘", "💧", "🎸", "🌱", "✍️", "🥗", "😴"];
 
@@ -89,11 +87,9 @@ function Index() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setHabits(JSON.parse(raw) as Habit[]);
-      setReminder(
-        localStorage.getItem(REMINDER_KEY) ?? localStorage.getItem(LEGACY_REMINDER_KEY) ?? "",
-      );
+      setReminder(localStorage.getItem(REMINDER_KEY) ?? "");
     } catch {
       /* ignore */
     }
