@@ -15,7 +15,7 @@ import sys
 sys.path.insert(0, "/tmp")
 from lovable_ai import call_ai_structured  # noqa: E402
 
-MODEL = "openai/gpt-6-astra"
+MODEL = "google/gemini-3.8-flash"
 EXTS = (".ts", ".tsx", ".js", ".jsx", ".css", ".json", ".md", ".html", ".txt")
 SKIP_DIRS = {"node_modules", ".git", "dist", "build", ".output", ".vinxi", ".lovable"}
 SKIP_FILES = {"src/routeTree.gen.ts", "bun.lock", "package-lock.json"}
