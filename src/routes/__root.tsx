@@ -77,16 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Racha — hábitos y rachas diarias" },
+      { title: "Streak — daily habits and streaks" },
       {
         name: "description",
-        content: "Rastrea tus hábitos día a día y mantén viva tu racha.",
+        content: "Track your habits day by day and keep your streak alive.",
       },
-      { name: "author", content: "Racha" },
-      { property: "og:title", content: "Racha — hábitos y rachas diarias" },
+      { name: "author", content: "Streak" },
+      { property: "og:title", content: "Streak — daily habits and streaks" },
       {
         property: "og:description",
-        content: "Rastrea tus hábitos día a día y mantén viva tu racha.",
+        content: "Track your habits day by day and keep your streak alive.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

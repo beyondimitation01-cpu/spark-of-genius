@@ -4,17 +4,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Racha — rastreador visual de hábitos y rachas" },
+      { title: "Streak — visual habit and streak tracker" },
       {
         name: "description",
         content:
-          "Crea hábitos, marca cada día cumplido y mira crecer tus rachas. Con recordatorios diarios y todo guardado en tu dispositivo.",
+          "Create habits, check off each day you show up, and watch your streaks grow. Daily reminders included, everything saved on your device.",
       },
-      { property: "og:title", content: "Racha — rastreador visual de hábitos" },
+      { property: "og:title", content: "Streak — visual habit tracker" },
       {
         property: "og:description",
         content:
-          "Marca tus hábitos cada día, encendé los puntos y no rompas la racha. Recordatorios diarios incluidos.",
+          "Check off your habits every day, light up the dots, and never break the streak. Daily reminders included.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -71,9 +71,9 @@ function bestStreakOf(done: string[]) {
 }
 
 const DEFAULT_HABITS: Habit[] = [
-  { id: "h1", name: "Leer 20 minutos", emoji: "📚", done: [] },
-  { id: "h2", name: "Entrenar", emoji: "🏃", done: [] },
-  { id: "h3", name: "Meditar", emoji: "🧘", done: [] },
+  { id: "h1", name: "Read 20 minutes", emoji: "📚", done: [] },
+  { id: "h2", name: "Work out", emoji: "🏃", done: [] },
+  { id: "h3", name: "Meditate", emoji: "🧘", done: [] },
 ];
 
 function Index() {
@@ -115,10 +115,10 @@ function Index() {
       const stamp = `${dayKey(now)} ${reminder}`;
       if (hhmm === reminder && firedRef.current !== stamp) {
         firedRef.current = stamp;
-        new Notification("Racha", {
+        new Notification("Streak", {
           body: pendingToday
-            ? `Te quedan ${pendingToday} hábito(s) por marcar hoy. No rompas la racha.`
-            : "¡Día completo! Sigue así.",
+            ? `You still have ${pendingToday} habit(s) to check off today. Don't break the streak.`
+            : "All done for today. Keep it up!",
         });
       }
     };
@@ -170,23 +170,23 @@ function Index() {
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              Racha
+              Streak
             </h1>
             <p className="mt-2 max-w-md text-sm text-muted-foreground">
-              Marca cada día que cumples. Los puntos se encienden y tu racha crece.
+              Check off every day you show up. The dots light up and your streak grows.
             </p>
           </div>
           <div className="rounded-2xl border border-border bg-card px-5 py-3 text-right">
             <p className="font-display text-3xl font-bold text-primary">{totalStreak}</p>
             <p className="text-xs uppercase tracking-widest text-muted-foreground">
-              mejor racha activa
+              best active streak
             </p>
           </div>
         </header>
 
         <section className="mt-8 rounded-2xl border border-border bg-card/60 p-5">
           <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-            Recordatorio diario
+            Daily reminder
           </h2>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <input
@@ -198,12 +198,12 @@ function Index() {
             {reminder ? (
               <span className="text-sm text-muted-foreground">
                 {permission === "granted"
-                  ? `Te avisaré cada día a las ${reminder} mientras la app esté abierta.`
-                  : "Permite las notificaciones del navegador para recibir el aviso."}
+                  ? `I'll remind you every day at ${reminder} while the app is open.`
+                  : "Allow browser notifications to receive the reminder."}
               </span>
             ) : (
               <span className="text-sm text-muted-foreground">
-                Elige una hora para que te avise cada día.
+                Pick a time and I'll remind you every day.
               </span>
             )}
             {reminder && permission !== "granted" && (
@@ -211,7 +211,7 @@ function Index() {
                 onClick={() => enableReminders(reminder)}
                 className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
               >
-                Permitir avisos
+                Allow notifications
               </button>
             )}
           </div>
@@ -230,7 +230,7 @@ function Index() {
                     <div>
                       <h3 className="font-display text-lg font-semibold">{h.name}</h3>
                       <p className="text-xs text-muted-foreground">
-                        Racha actual {streak} · récord {best}
+                        Current streak {streak} · best {best}
                       </p>
                     </div>
                   </div>
@@ -243,11 +243,11 @@ function Index() {
                           : "border border-input text-foreground hover:bg-secondary"
                       }`}
                     >
-                      {doneToday ? "Hecho hoy" : "Marcar hoy"}
+                      {doneToday ? "Done today" : "Check today"}
                     </button>
                     <button
                       onClick={() => removeHabit(h.id)}
-                      aria-label={`Eliminar ${h.name}`}
+                      aria-label={`Delete ${h.name}`}
                       className="rounded-xl border border-input px-3 py-2 text-sm text-muted-foreground transition hover:text-destructive"
                     >
                       ✕
@@ -280,14 +280,14 @@ function Index() {
 
         <section className="mt-6 rounded-2xl border border-dashed border-border p-5">
           <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-            Nuevo hábito
+            New habit
           </h2>
           <div className="mt-3 flex flex-wrap gap-3">
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addHabit()}
-              placeholder="Beber 2 litros de agua"
+              placeholder="Drink 2 liters of water"
               className="min-w-48 flex-1 rounded-xl border border-input bg-background px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
             />
             <div className="flex flex-wrap gap-1">
@@ -307,13 +307,13 @@ function Index() {
               onClick={addHabit}
               className="rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
             >
-              Añadir
+              Add
             </button>
           </div>
         </section>
 
         <p className="mt-8 text-center text-xs text-muted-foreground">
-          Tus hábitos se guardan en este dispositivo.
+          Your habits are saved on this device.
         </p>
       </div>
     </main>
