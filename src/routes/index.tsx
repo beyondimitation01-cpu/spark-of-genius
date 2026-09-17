@@ -33,17 +33,15 @@ type Habit = {
 const STORAGE_KEY = "streak:habits:v1";
 const REMINDER_KEY = "streak:reminder:v1";
 
-const ENGLISH_HABIT_NAMES: Record<string, string> = {
-  "ler 20 minutos": "Read 20 minutes",
-  "leer 20 minutos": "Read 20 minutes",
-  treinar: "Work out",
-  entrenar: "Work out",
-  meditar: "Meditate",
+const ENGLISH_DEFAULT_NAMES: Record<string, string> = {
+  h1: "Read 20 minutes",
+  h2: "Work out",
+  h3: "Meditate",
 };
 
 const translateSavedHabit = (habit: Habit): Habit => ({
   ...habit,
-  name: ENGLISH_HABIT_NAMES[habit.name.trim().toLocaleLowerCase()] ?? habit.name,
+  name: ENGLISH_DEFAULT_NAMES[habit.id] ?? habit.name,
 });
 
 const EMOJIS = ["🔥", "📚", "🏃", "🧘", "💧", "🎸", "🌱", "✍️", "🥗", "😴"];
