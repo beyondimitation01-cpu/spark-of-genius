@@ -30,8 +30,10 @@ type Habit = {
   done: string[]; // ISO days: YYYY-MM-DD
 };
 
-const STORAGE_KEY = "racha:habits:v1";
-const REMINDER_KEY = "racha:reminder:v1";
+const STORAGE_KEY = "streak:habits:v1";
+const REMINDER_KEY = "streak:reminder:v1";
+const LEGACY_STORAGE_KEY = "racha:habits:v1";
+const LEGACY_REMINDER_KEY = "racha:reminder:v1";
 
 const EMOJIS = ["🔥", "📚", "🏃", "🧘", "💧", "🎸", "🌱", "✍️", "🥗", "😴"];
 
