@@ -142,3 +142,52 @@
     color: var(--color-foreground);
   }
 }
+
+/* Racha — dark ember design system (app is dark by default) */
+:root {
+  --radius: 1rem;
+  --background: oklch(0.17 0.015 60);
+  --foreground: oklch(0.96 0.01 80);
+  --card: oklch(0.22 0.018 60);
+  --card-foreground: oklch(0.96 0.01 80);
+  --popover: oklch(0.22 0.018 60);
+  --popover-foreground: oklch(0.96 0.01 80);
+  --primary: oklch(0.72 0.19 48);
+  --primary-foreground: oklch(0.18 0.02 60);
+  --secondary: oklch(0.27 0.02 60);
+  --secondary-foreground: oklch(0.96 0.01 80);
+  --muted: oklch(0.26 0.015 60);
+  --muted-foreground: oklch(0.72 0.02 70);
+  --accent: oklch(0.78 0.15 90);
+  --accent-foreground: oklch(0.18 0.02 60);
+  --destructive: oklch(0.6 0.2 25);
+  --destructive-foreground: oklch(0.97 0.01 80);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.72 0.19 48);
+}
+
+@theme inline {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-image: radial-gradient(
+    circle at 15% -10%,
+    oklch(0.72 0.19 48 / 18%),
+    transparent 55%
+  );
+  background-attachment: fixed;
+}
+
+@keyframes racha-pop {
+  0% { transform: scale(0.6); opacity: 0.4; }
+  60% { transform: scale(1.18); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@utility animate-pop {
+  animation: racha-pop 0.28s ease-out;
+}
