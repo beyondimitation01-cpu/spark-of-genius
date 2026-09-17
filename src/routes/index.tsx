@@ -33,6 +33,17 @@ type Habit = {
 const STORAGE_KEY = "streak:habits:v1";
 const REMINDER_KEY = "streak:reminder:v1";
 
+const ENGLISH_DEFAULT_NAMES: Record<string, string> = {
+  h1: "Read 20 minutes",
+  h2: "Work out",
+  h3: "Meditate",
+};
+
+const translateSavedHabit = (habit: Habit): Habit => ({
+  ...habit,
+  name: ENGLISH_DEFAULT_NAMES[habit.id] ?? habit.name,
+});
+
 const EMOJIS = ["🔥", "📚", "🏃", "🧘", "💧", "🎸", "🌱", "✍️", "🥗", "😴"];
 
 const dayKey = (d: Date) =>
@@ -88,7 +99,7 @@ function Index() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setHabits(JSON.parse(raw) as Habit[]);
+      if (raw) setHabits((JSON.parse(raw) as Habit[]).map(translateSavedHabit));
       setReminder(localStorage.getItem(REMINDER_KEY) ?? "");
     } catch {
       /* ignore */
