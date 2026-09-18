@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,16 +24,32 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+type Category = "Health" | "Productivity" | "Wellbeing";
+
 type Habit = {
   id: string;
   name: string;
   emoji: string;
+  category: Category;
   done: string[]; // ISO days: YYYY-MM-DD
 };
 
-const STORAGE_KEY = "streak:habits:v2";
-const PREVIOUS_STORAGE_KEY = "streak:habits:v1";
+const STORAGE_KEY = "streak:habits:v3";
+const PREVIOUS_STORAGE_KEYS = ["streak:habits:v2", "streak:habits:v1"];
 const REMINDER_KEY = "streak:reminder:v1";
+
+const CATEGORIES: Category[] = ["Health", "Productivity", "Wellbeing"];
+
+const DEFAULT_CATEGORIES: Record<string, Category> = {
+  h1: "Productivity",
+  h2: "Health",
+  h3: "Wellbeing",
+  h4: "Health",
+  h5: "Health",
+  h6: "Productivity",
+  h7: "Productivity",
+  h8: "Health",
+};
 
 const ENGLISH_DEFAULT_NAMES: Record<string, string> = {
   h1: "Read 20 minutes",
@@ -45,9 +62,10 @@ const ENGLISH_DEFAULT_NAMES: Record<string, string> = {
   h8: "Sleep 8 hours",
 };
 
-const translateSavedHabit = (habit: Habit): Habit => ({
+const translateSavedHabit = (habit: Omit<Habit, "category"> & { category?: Category }): Habit => ({
   ...habit,
   name: ENGLISH_DEFAULT_NAMES[habit.id] ?? habit.name,
+  category: habit.category ?? DEFAULT_CATEGORIES[habit.id] ?? "Productivity",
 });
 
 const EMOJIS = [
@@ -103,14 +121,14 @@ function bestStreakOf(done: string[]) {
 }
 
 const DEFAULT_HABITS: Habit[] = [
-  { id: "h1", name: "Read 20 minutes", emoji: "📚", done: [] },
-  { id: "h2", name: "Work out", emoji: "🏃", done: [] },
-  { id: "h3", name: "Meditate", emoji: "🧘", done: [] },
-  { id: "h4", name: "Drink 2 liters of water", emoji: "💧", done: [] },
-  { id: "h5", name: "Walk 10,000 steps", emoji: "🚶", done: [] },
-  { id: "h6", name: "Write in my journal", emoji: "✍️", done: [] },
-  { id: "h7", name: "Practice a skill", emoji: "🎯", done: [] },
-  { id: "h8", name: "Sleep 8 hours", emoji: "😴", done: [] },
+  { id: "h1", name: "Read 20 minutes", emoji: "📚", category: "Productivity", done: [] },
+  { id: "h2", name: "Work out", emoji: "🏃", category: "Health", done: [] },
+  { id: "h3", name: "Meditate", emoji: "🧘", category: "Wellbeing", done: [] },
+  { id: "h4", name: "Drink 2 liters of water", emoji: "💧", category: "Health", done: [] },
+  { id: "h5", name: "Walk 10,000 steps", emoji: "🚶", category: "Health", done: [] },
+  { id: "h6", name: "Write in my journal", emoji: "✍️", category: "Productivity", done: [] },
+  { id: "h7", name: "Practice a skill", emoji: "🎯", category: "Productivity", done: [] },
+  { id: "h8", name: "Sleep 8 hours", emoji: "😴", category: "Health", done: [] },
 ];
 
 function Index() {
@@ -118,13 +136,17 @@ function Index() {
   const [loaded, setLoaded] = useState(false);
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState(EMOJIS[0]);
+  const [category, setCategory] = useState<Category>("Health");
+  const [categoryFilter, setCategoryFilter] = useState<"All" | Category>("All");
   const [reminder, setReminder] = useState<string>("");
   const [permission, setPermission] = useState<string>("default");
   const firedRef = useRef<string>("");
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(PREVIOUS_STORAGE_KEY);
+      const raw =
+        localStorage.getItem(STORAGE_KEY) ??
+        PREVIOUS_STORAGE_KEYS.map((key) => localStorage.getItem(key)).find(Boolean);
       if (raw) {
         const savedHabits = (JSON.parse(raw) as Habit[]).map(translateSavedHabit);
         const savedIds = new Set(savedHabits.map((habit) => habit.id));
@@ -146,6 +168,14 @@ function Index() {
   const pendingToday = useMemo(
     () => habits.filter((h) => !h.done.includes(dayKey(shiftDays(0)))).length,
     [habits],
+  );
+
+  const visibleHabits = useMemo(
+    () =>
+      categoryFilter === "All"
+        ? habits
+        : habits.filter((habit) => habit.category === categoryFilter),
+    [categoryFilter, habits],
   );
 
   // Daily reminder while the app is open
@@ -186,7 +216,7 @@ function Index() {
     if (!n) return;
     setHabits((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), name: n, emoji: emoji ?? "🔥", done: [] },
+      { id: crypto.randomUUID(), name: n, emoji: emoji ?? "🔥", category, done: [] },
     ]);
     setName("");
   };
@@ -259,8 +289,28 @@ function Index() {
           </div>
         </section>
 
-        <section className="mt-6 space-y-4">
-          {habits.map((h) => {
+        <div className="mt-6 flex flex-wrap gap-2" aria-label="Filter activities by category">
+          {(["All", ...CATEGORIES] as const).map((item) => (
+            <Button
+              key={item}
+              type="button"
+              size="sm"
+              variant={categoryFilter === item ? "default" : "outline"}
+              onClick={() => setCategoryFilter(item)}
+              aria-pressed={categoryFilter === item}
+            >
+              {item}
+              <span className="text-xs opacity-70">
+                {item === "All"
+                  ? habits.length
+                  : habits.filter((habit) => habit.category === item).length}
+              </span>
+            </Button>
+          ))}
+        </div>
+
+        <section className="mt-4 space-y-4">
+          {visibleHabits.map((h) => {
             const streak = streakOf(h.done);
             const best = bestStreakOf(h.done);
             const doneToday = h.done.includes(today);
@@ -270,7 +320,12 @@ function Index() {
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{h.emoji}</span>
                     <div>
-                      <h3 className="font-display text-lg font-semibold">{h.name}</h3>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="font-display text-lg font-semibold">{h.name}</h3>
+                        <span className="rounded-md bg-secondary px-2 py-1 text-[10px] font-semibold uppercase text-secondary-foreground">
+                          {h.category}
+                        </span>
+                      </div>
                       <p className="text-xs text-muted-foreground">
                         Current streak {streak} · best {best}
                       </p>
@@ -332,6 +387,18 @@ function Index() {
               placeholder="Drink 2 liters of water"
               className="min-w-48 flex-1 rounded-xl border border-input bg-background px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
             />
+            <select
+              value={category}
+              onChange={(event) => setCategory(event.target.value as Category)}
+              aria-label="Habit category"
+              className="rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+            >
+              {CATEGORIES.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
             <div className="flex flex-wrap gap-1">
               {EMOJIS.map((e) => (
                 <button
