@@ -211,6 +211,30 @@ function Index() {
     return () => clearInterval(id);
   }, [reminder, permission, pendingToday]);
 
+  // Per-habit reminders while the app is open
+  useEffect(() => {
+    if (permission !== "granted") return;
+    const tick = () => {
+      const now = new Date();
+      const hhmm = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const day = dayKey(now);
+      habits.forEach((h) => {
+        if (!h.reminder || h.reminder !== hhmm) return;
+        if (h.done.includes(day)) return;
+        const stamp = `${day} ${h.reminder}`;
+        if (habitFiredRef.current[h.id] === stamp) return;
+        habitFiredRef.current[h.id] = stamp;
+        new Notification(`${h.emoji} ${h.name}`, {
+          body: "Time to complete this habit. Keep your streak alive!",
+        });
+      });
+    };
+    tick();
+    const id = setInterval(tick, 20000);
+    return () => clearInterval(id);
+  }, [habits, permission]);
+
+
   const toggle = (id: string, key: string) =>
     setHabits((prev) =>
       prev.map((h) =>
