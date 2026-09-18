@@ -40,6 +40,17 @@ const REMINDER_KEY = "streak:reminder:v1";
 
 const CATEGORIES: Category[] = ["Health", "Productivity", "Wellbeing"];
 
+const HABIT_PRESETS: Array<Pick<Habit, "name" | "emoji" | "category">> = [
+  { name: "Morning stretch", emoji: "🧘", category: "Health" },
+  { name: "Drink water", emoji: "💧", category: "Health" },
+  { name: "Take a walk", emoji: "🚶", category: "Health" },
+  { name: "Plan my day", emoji: "🎯", category: "Productivity" },
+  { name: "Read 20 minutes", emoji: "📚", category: "Productivity" },
+  { name: "Write in my journal", emoji: "✍️", category: "Wellbeing" },
+  { name: "Meditate", emoji: "🧘", category: "Wellbeing" },
+  { name: "Sleep 8 hours", emoji: "😴", category: "Wellbeing" },
+];
+
 const DEFAULT_CATEGORIES: Record<string, Category> = {
   h1: "Productivity",
   h2: "Health",
@@ -221,6 +232,12 @@ function Index() {
     setName("");
   };
 
+  const choosePreset = (preset: (typeof HABIT_PRESETS)[number]) => {
+    setName(preset.name);
+    setEmoji(preset.emoji);
+    setCategory(preset.category);
+  };
+
   const removeHabit = (id: string) => setHabits((prev) => prev.filter((h) => h.id !== id));
 
   const enableReminders = async (time: string) => {
@@ -379,12 +396,31 @@ function Index() {
           <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-muted-foreground">
             New habit
           </h2>
+          <div className="mt-3">
+            <p className="text-xs font-medium text-muted-foreground">Quick picks</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {HABIT_PRESETS.map((preset) => (
+                <Button
+                  key={`${preset.category}-${preset.name}`}
+                  type="button"
+                  size="sm"
+                  variant={name === preset.name ? "secondary" : "outline"}
+                  onClick={() => choosePreset(preset)}
+                  aria-pressed={name === preset.name}
+                >
+                  <span aria-hidden="true">{preset.emoji}</span>
+                  {preset.name}
+                </Button>
+              ))}
+            </div>
+          </div>
           <div className="mt-3 flex flex-wrap gap-3">
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addHabit()}
-              placeholder="Drink 2 liters of water"
+              placeholder="Or type your own habit"
+              aria-label="Habit name"
               className="min-w-48 flex-1 rounded-xl border border-input bg-background px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
             />
             <select
