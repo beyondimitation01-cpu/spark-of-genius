@@ -32,6 +32,7 @@ type Habit = {
   emoji: string;
   category: Category;
   done: string[]; // ISO days: YYYY-MM-DD
+  reminder?: string; // HH:MM, optional per-habit reminder
 };
 
 const STORAGE_KEY = "streak:habits:v3";
@@ -152,6 +153,7 @@ function Index() {
   const [reminder, setReminder] = useState<string>("");
   const [permission, setPermission] = useState<string>("default");
   const firedRef = useRef<string>("");
+  const habitFiredRef = useRef<Record<string, string>>({});
 
   useEffect(() => {
     try {
@@ -210,6 +212,30 @@ function Index() {
     return () => clearInterval(id);
   }, [reminder, permission, pendingToday]);
 
+  // Per-habit reminders while the app is open
+  useEffect(() => {
+    if (permission !== "granted") return;
+    const tick = () => {
+      const now = new Date();
+      const hhmm = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const day = dayKey(now);
+      habits.forEach((h) => {
+        if (!h.reminder || h.reminder !== hhmm) return;
+        if (h.done.includes(day)) return;
+        const stamp = `${day} ${h.reminder}`;
+        if (habitFiredRef.current[h.id] === stamp) return;
+        habitFiredRef.current[h.id] = stamp;
+        new Notification(`${h.emoji} ${h.name}`, {
+          body: "Time to complete this habit. Keep your streak alive!",
+        });
+      });
+    };
+    tick();
+    const id = setInterval(tick, 20000);
+    return () => clearInterval(id);
+  }, [habits, permission]);
+
+
   const toggle = (id: string, key: string) =>
     setHabits((prev) =>
       prev.map((h) =>
@@ -243,6 +269,14 @@ function Index() {
   const enableReminders = async (time: string) => {
     setReminder(time);
     localStorage.setItem(REMINDER_KEY, time);
+    if (time && typeof Notification !== "undefined" && Notification.permission === "default") {
+      const p = await Notification.requestPermission();
+      setPermission(p);
+    }
+  };
+
+  const setHabitReminder = async (id: string, time: string) => {
+    setHabits((prev) => prev.map((h) => (h.id === id ? { ...h, reminder: time } : h)));
     if (time && typeof Notification !== "undefined" && Notification.permission === "default") {
       const p = await Notification.requestPermission();
       setPermission(p);
