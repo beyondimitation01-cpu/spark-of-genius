@@ -153,6 +153,7 @@ function Index() {
   const [reminder, setReminder] = useState<string>("");
   const [permission, setPermission] = useState<string>("default");
   const firedRef = useRef<string>("");
+  const habitFiredRef = useRef<Record<string, string>>({});
 
   useEffect(() => {
     try {
