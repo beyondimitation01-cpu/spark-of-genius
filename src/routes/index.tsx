@@ -32,6 +32,7 @@ type Habit = {
   emoji: string;
   category: Category;
   done: string[]; // ISO days: YYYY-MM-DD
+  reminder?: string; // HH:MM, optional per-habit reminder
 };
 
 const STORAGE_KEY = "streak:habits:v3";
