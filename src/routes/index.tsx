@@ -180,13 +180,8 @@ function Index() {
       <div className="mx-auto w-full max-w-3xl">
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="flex items-center gap-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              <img
-                src="/logo.svg"
-                alt="Streak logo"
-                className="h-10 w-10 rounded-xl sm:h-12 sm:w-12"
-              />
-              Streak
+            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+              Build your streak
             </h1>
             <p className="mt-2 max-w-md text-sm text-muted-foreground">
               Check off every day you show up. The dots light up and your streak grows.

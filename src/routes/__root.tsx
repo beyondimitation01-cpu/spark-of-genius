@@ -131,6 +131,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <header className="border-b border-border bg-background/90 backdrop-blur">
+        <nav className="mx-auto flex h-16 w-full max-w-3xl items-center px-5 sm:px-8" aria-label="Main navigation">
+          <Link to="/" className="flex items-center gap-3 font-display text-lg font-bold text-foreground">
+            <img src="/logo.svg" alt="Streak logo" className="h-9 w-9 rounded-lg" />
+            <span>Streak</span>
+          </Link>
+        </nav>
+      </header>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
