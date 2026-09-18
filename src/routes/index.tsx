@@ -275,6 +275,14 @@ function Index() {
     }
   };
 
+  const setHabitReminder = async (id: string, time: string) => {
+    setHabits((prev) => prev.map((h) => (h.id === id ? { ...h, reminder: time } : h)));
+    if (time && typeof Notification !== "undefined" && Notification.permission === "default") {
+      const p = await Notification.requestPermission();
+      setPermission(p);
+    }
+  };
+
   const totalStreak = habits.reduce((acc, h) => Math.max(acc, streakOf(h.done)), 0);
   const days = Array.from({ length: 35 }, (_, i) => dayKey(shiftDays(34 - i)));
   const today = dayKey(shiftDays(0));
