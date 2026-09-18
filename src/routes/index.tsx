@@ -30,13 +30,19 @@ type Habit = {
   done: string[]; // ISO days: YYYY-MM-DD
 };
 
-const STORAGE_KEY = "streak:habits:v1";
+const STORAGE_KEY = "streak:habits:v2";
+const PREVIOUS_STORAGE_KEY = "streak:habits:v1";
 const REMINDER_KEY = "streak:reminder:v1";
 
 const ENGLISH_DEFAULT_NAMES: Record<string, string> = {
   h1: "Read 20 minutes",
   h2: "Work out",
   h3: "Meditate",
+  h4: "Drink 2 liters of water",
+  h5: "Walk 10,000 steps",
+  h6: "Write in my journal",
+  h7: "Practice a skill",
+  h8: "Sleep 8 hours",
 };
 
 const translateSavedHabit = (habit: Habit): Habit => ({
@@ -44,7 +50,22 @@ const translateSavedHabit = (habit: Habit): Habit => ({
   name: ENGLISH_DEFAULT_NAMES[habit.id] ?? habit.name,
 });
 
-const EMOJIS = ["🔥", "📚", "🏃", "🧘", "💧", "🎸", "🌱", "✍️", "🥗", "😴"];
+const EMOJIS = [
+  "🔥",
+  "📚",
+  "🏃",
+  "🧘",
+  "💧",
+  "🚶",
+  "✍️",
+  "🎯",
+  "😴",
+  "🥗",
+  "🎸",
+  "🌱",
+  "🧹",
+  "💊",
+];
 
 const dayKey = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -85,6 +106,11 @@ const DEFAULT_HABITS: Habit[] = [
   { id: "h1", name: "Read 20 minutes", emoji: "📚", done: [] },
   { id: "h2", name: "Work out", emoji: "🏃", done: [] },
   { id: "h3", name: "Meditate", emoji: "🧘", done: [] },
+  { id: "h4", name: "Drink 2 liters of water", emoji: "💧", done: [] },
+  { id: "h5", name: "Walk 10,000 steps", emoji: "🚶", done: [] },
+  { id: "h6", name: "Write in my journal", emoji: "✍️", done: [] },
+  { id: "h7", name: "Practice a skill", emoji: "🎯", done: [] },
+  { id: "h8", name: "Sleep 8 hours", emoji: "😴", done: [] },
 ];
 
 function Index() {
@@ -98,8 +124,13 @@ function Index() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setHabits((JSON.parse(raw) as Habit[]).map(translateSavedHabit));
+      const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(PREVIOUS_STORAGE_KEY);
+      if (raw) {
+        const savedHabits = (JSON.parse(raw) as Habit[]).map(translateSavedHabit);
+        const savedIds = new Set(savedHabits.map((habit) => habit.id));
+        const newActivities = DEFAULT_HABITS.filter((habit) => !savedIds.has(habit.id));
+        setHabits([...savedHabits, ...newActivities]);
+      }
       setReminder(localStorage.getItem(REMINDER_KEY) ?? "");
     } catch {
       /* ignore */
