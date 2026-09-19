@@ -380,6 +380,22 @@ function Index() {
                       <p className="text-xs text-muted-foreground">
                         Current streak {streak} · best {best}
                       </p>
+                      <label className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+                        Remind me at
+                        <input
+                          type="time"
+                          value={h.reminder ?? ""}
+                          onChange={(e) => setHabitReminder(h.id, e.target.value)}
+                          aria-label={`Reminder time for ${h.name}`}
+                          className="rounded-lg border border-input bg-background px-2 py-1 text-xs text-foreground outline-none focus:ring-2 focus:ring-ring"
+                        />
+                        {h.reminder && (
+                          <span>
+                            every day at {h.reminder}
+                            {permission === "granted" ? "" : " (allow notifications)"}
+                          </span>
+                        )}
+                      </label>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
