@@ -216,6 +216,51 @@ function Index() {
     [categoryFilter, habits],
   );
 
+  // Stats: last 7 days, per-habit streaks, and 4-week completion rate
+  const weeklyData = useMemo(
+    () =>
+      Array.from({ length: 7 }, (_, i) => {
+        const date = shiftDays(6 - i);
+        const key = dayKey(date);
+        return {
+          day: WEEKDAYS[date.getDay()],
+          completed: habits.filter((h) => h.done.includes(key)).length,
+        };
+      }),
+    [habits],
+  );
+
+  const streakData = useMemo(
+    () =>
+      habits.map((h) => ({
+        name: `${h.emoji} ${h.name}`,
+        current: streakOf(h.done),
+        best: bestStreakOf(h.done),
+      })),
+    [habits],
+  );
+
+  const weeklyRateData = useMemo(
+    () =>
+      Array.from({ length: 4 }, (_, i) => {
+        const weekIndex = 3 - i;
+        let done = 0;
+        for (let d = 0; d < 7; d++) {
+          const key = dayKey(shiftDays(weekIndex * 7 + d));
+          done += habits.filter((h) => h.done.includes(key)).length;
+        }
+        const possible = habits.length * 7;
+        return {
+          week: weekIndex === 0 ? "This week" : `${weekIndex}w ago`,
+          rate: possible ? Math.round((done / possible) * 100) : 0,
+        };
+      }),
+    [habits],
+  );
+
+  const doneToday7 = weeklyData[6]?.completed ?? 0;
+  const weekTotal = weeklyData.reduce((acc, d) => acc + d.completed, 0);
+
   // Daily reminder while the app is open
   useEffect(() => {
     if (!reminder || permission !== "granted") return;
