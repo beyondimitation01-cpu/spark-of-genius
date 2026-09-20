@@ -195,6 +195,14 @@ function Index() {
     if (loaded) localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
   }, [habits, loaded]);
 
+  // Theme switch (dark by default)
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle("light", theme === "light");
+    root.classList.toggle("dark", theme === "dark");
+    if (loaded) localStorage.setItem(THEME_KEY, theme);
+  }, [theme, loaded]);
+
   const pendingToday = useMemo(
     () => habits.filter((h) => !h.done.includes(dayKey(shiftDays(0)))).length,
     [habits],
