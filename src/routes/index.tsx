@@ -166,6 +166,7 @@ function Index() {
   const [categoryFilter, setCategoryFilter] = useState<"All" | Category>("All");
   const [reminder, setReminder] = useState<string>("");
   const [permission, setPermission] = useState<string>("default");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const firedRef = useRef<string>("");
   const habitFiredRef = useRef<Record<string, string>>({});
 
