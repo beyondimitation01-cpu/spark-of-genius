@@ -379,6 +379,157 @@ function Index() {
 
         <section className="mt-8 rounded-2xl border border-border bg-card/60 p-5">
           <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-muted-foreground">
+            Settings
+          </h2>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold">Dark mode</p>
+              <p className="text-xs text-muted-foreground">
+                {theme === "dark" ? "Dark theme is on." : "Light theme is on."}
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={theme === "dark"}
+              aria-label="Dark mode"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="flex items-center gap-2 rounded-full border border-input bg-background px-2 py-1 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span
+                className={`h-6 w-11 rounded-full p-1 transition ${theme === "dark" ? "bg-primary" : "bg-muted"}`}
+              >
+                <span
+                  className={`block h-4 w-4 rounded-full bg-card transition ${theme === "dark" ? "translate-x-5" : ""}`}
+                />
+              </span>
+              <span className="pr-2 text-xs font-semibold">
+                {theme === "dark" ? "Dark" : "Light"}
+              </span>
+            </button>
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-2xl border border-border bg-card/60 p-5">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-muted-foreground">
+            Statistics
+          </h2>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="rounded-xl border border-border bg-card p-3">
+              <p className="font-display text-2xl font-bold text-primary">{doneToday7}</p>
+              <p className="text-xs text-muted-foreground">checked today</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3">
+              <p className="font-display text-2xl font-bold text-primary">{weekTotal}</p>
+              <p className="text-xs text-muted-foreground">checks this week</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3">
+              <p className="font-display text-2xl font-bold text-primary">{totalStreak}</p>
+              <p className="text-xs text-muted-foreground">best active streak</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3">
+              <p className="font-display text-2xl font-bold text-primary">{habits.length}</p>
+              <p className="text-xs text-muted-foreground">habits tracked</p>
+            </div>
+          </div>
+
+          {loaded && (
+            <div className="mt-6 space-y-8">
+              <div>
+                <p className="mb-2 text-xs font-semibold text-muted-foreground">
+                  Last 7 days — habits completed
+                </p>
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={weeklyData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis dataKey="day" stroke="var(--muted-foreground)" fontSize={12} />
+                      <YAxis allowDecimals={false} stroke="var(--muted-foreground)" fontSize={12} />
+                      <Tooltip
+                        contentStyle={{
+                          background: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: 12,
+                          color: "var(--card-foreground)",
+                        }}
+                      />
+                      <Bar dataKey="completed" fill="var(--primary)" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs font-semibold text-muted-foreground">
+                  Weekly completion rate (%)
+                </p>
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={weeklyRateData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis dataKey="week" stroke="var(--muted-foreground)" fontSize={12} />
+                      <YAxis domain={[0, 100]} stroke="var(--muted-foreground)" fontSize={12} />
+                      <Tooltip
+                        contentStyle={{
+                          background: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: 12,
+                          color: "var(--card-foreground)",
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="rate"
+                        stroke="var(--accent)"
+                        strokeWidth={3}
+                        dot={{ r: 4 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs font-semibold text-muted-foreground">
+                  Current streak vs. best streak
+                </p>
+                <div style={{ height: Math.max(160, habits.length * 34) }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={streakData} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis
+                        type="number"
+                        allowDecimals={false}
+                        stroke="var(--muted-foreground)"
+                        fontSize={12}
+                      />
+                      <YAxis
+                        type="category"
+                        dataKey="name"
+                        width={150}
+                        stroke="var(--muted-foreground)"
+                        fontSize={11}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          background: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: 12,
+                          color: "var(--card-foreground)",
+                        }}
+                      />
+                      <Bar dataKey="current" fill="var(--primary)" radius={[0, 6, 6, 0]} />
+                      <Bar dataKey="best" fill="var(--accent)" radius={[0, 6, 6, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
+
+        <section className="mt-6 rounded-2xl border border-border bg-card/60 p-5">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-muted-foreground">
             Daily reminder
           </h2>
           <div className="mt-3 flex flex-wrap items-center gap-3">
