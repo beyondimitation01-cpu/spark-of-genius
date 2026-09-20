@@ -49,6 +49,9 @@ type Habit = {
 const STORAGE_KEY = "streak:habits:v3";
 const PREVIOUS_STORAGE_KEYS = ["streak:habits:v2", "streak:habits:v1"];
 const REMINDER_KEY = "streak:reminder:v1";
+const THEME_KEY = "streak:theme:v1";
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const CATEGORIES: Category[] = ["Health", "Productivity", "Wellbeing"];
 
