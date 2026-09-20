@@ -143,8 +143,9 @@
   }
 }
 
-/* Streak — midnight violet design system (app is dark by default) */
-:root {
+/* Streak — midnight violet design system (dark by default, .light for light mode) */
+:root,
+.dark {
   --radius: 1rem;
   --background: oklch(0.16 0.03 292);
   --foreground: oklch(0.96 0.01 300);
