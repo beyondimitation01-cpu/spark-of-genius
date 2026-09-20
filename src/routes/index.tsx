@@ -182,6 +182,8 @@ function Index() {
         setHabits([...savedHabits, ...newActivities]);
       }
       setReminder(localStorage.getItem(REMINDER_KEY) ?? "");
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
     } catch {
       /* ignore */
     }
