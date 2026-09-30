@@ -696,27 +696,33 @@ function Index() {
             <p className="text-xs font-medium text-muted-foreground">
               Quick picks — tap one to fill in the form
             </p>
-            <div className="mt-2 flex flex-wrap gap-1" role="tablist" aria-label="Quick pick category">
-              {CATEGORIES.map((c) => (
-                <Button
-                  key={c}
-                  type="button"
-                  size="sm"
-                  role="tab"
-                  aria-selected={category === c}
-                  variant={category === c ? "default" : "ghost"}
-                  onClick={() => setCategory(c)}
-                >
-                  {c}
-                </Button>
-              ))}
-            </div>
+            <input
+              value={presetSearch}
+              onChange={(e) => setPresetSearch(e.target.value)}
+              type="search"
+              placeholder="Search options…"
+              aria-label="Search habit options"
+              className="mt-2 w-full rounded-xl border border-input bg-background px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+            />
+            {!presetSearch.trim() && (
+              <div className="mt-2 flex flex-wrap gap-1" role="tablist" aria-label="Quick pick category">
+                {CATEGORIES.map((c) => (
+                  <Button
+                    key={c}
+                    type="button"
+                    size="sm"
+                    role="tab"
+                    aria-selected={category === c}
+                    variant={category === c ? "default" : "ghost"}
+                    onClick={() => setCategory(c)}
+                  >
+                    {c}
+                  </Button>
+                ))}
+              </div>
+            )}
             <div className="mt-2 flex flex-wrap gap-2">
-              {HABIT_PRESETS.filter(
-                (p) =>
-                  p.category === category &&
-                  !habits.some((h) => h.name.toLowerCase() === p.name.toLowerCase()),
-              ).map((preset) => (
+              {visiblePresets.map((preset) => (
                 <Button
                   key={`${preset.category}-${preset.name}`}
                   type="button"
@@ -727,9 +733,19 @@ function Index() {
                 >
                   <span aria-hidden="true">{preset.emoji}</span>
                   {preset.name}
+                  {presetSearch.trim() && (
+                    <span className="text-[10px] font-semibold uppercase opacity-60">
+                      {preset.category}
+                    </span>
+                  )}
                 </Button>
               ))}
             </div>
+            {presetSearch.trim() && visiblePresets.length === 0 && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                No options match “{presetSearch.trim()}”. Type your own habit below.
+              </p>
+            )}
           </div>
           <div className="mt-3 flex flex-wrap gap-3">
             <input
