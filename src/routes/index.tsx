@@ -178,6 +178,7 @@ function Index() {
   const [emoji, setEmoji] = useState(EMOJIS[0]);
   const [category, setCategory] = useState<Category>("Health");
   const [categoryFilter, setCategoryFilter] = useState<"All" | Category>("All");
+  const [presetSearch, setPresetSearch] = useState("");
   const [reminder, setReminder] = useState<string>("");
   const [permission, setPermission] = useState<string>("default");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
