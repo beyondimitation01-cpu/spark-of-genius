@@ -682,9 +682,30 @@ function Index() {
             New habit
           </h2>
           <div className="mt-3">
-            <p className="text-xs font-medium text-muted-foreground">Quick picks</p>
+            <p className="text-xs font-medium text-muted-foreground">
+              Quick picks — tap one to fill in the form
+            </p>
+            <div className="mt-2 flex flex-wrap gap-1" role="tablist" aria-label="Quick pick category">
+              {CATEGORIES.map((c) => (
+                <Button
+                  key={c}
+                  type="button"
+                  size="sm"
+                  role="tab"
+                  aria-selected={category === c}
+                  variant={category === c ? "default" : "ghost"}
+                  onClick={() => setCategory(c)}
+                >
+                  {c}
+                </Button>
+              ))}
+            </div>
             <div className="mt-2 flex flex-wrap gap-2">
-              {HABIT_PRESETS.map((preset) => (
+              {HABIT_PRESETS.filter(
+                (p) =>
+                  p.category === category &&
+                  !habits.some((h) => h.name.toLowerCase() === p.name.toLowerCase()),
+              ).map((preset) => (
                 <Button
                   key={`${preset.category}-${preset.name}`}
                   type="button"
