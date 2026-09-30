@@ -64,6 +64,20 @@ const HABIT_PRESETS: Array<Pick<Habit, "name" | "emoji" | "category">> = [
   { name: "Write in my journal", emoji: "✍️", category: "Wellbeing" },
   { name: "Meditate", emoji: "🧘", category: "Wellbeing" },
   { name: "Sleep 8 hours", emoji: "😴", category: "Wellbeing" },
+  { name: "Eat a healthy meal", emoji: "🥗", category: "Health" },
+  { name: "Take vitamins", emoji: "💊", category: "Health" },
+  { name: "Work out 30 minutes", emoji: "🏃", category: "Health" },
+  { name: "No sugar today", emoji: "🍎", category: "Health" },
+  { name: "Deep work 1 hour", emoji: "💻", category: "Productivity" },
+  { name: "Learn something new", emoji: "🧠", category: "Productivity" },
+  { name: "Practice guitar", emoji: "🎸", category: "Productivity" },
+  { name: "Tidy up 10 minutes", emoji: "🧹", category: "Productivity" },
+  { name: "Inbox zero", emoji: "📥", category: "Productivity" },
+  { name: "Water the plants", emoji: "🌱", category: "Wellbeing" },
+  { name: "Call a friend", emoji: "📞", category: "Wellbeing" },
+  { name: "Write 3 gratitudes", emoji: "🙏", category: "Wellbeing" },
+  { name: "No phone before bed", emoji: "📵", category: "Wellbeing" },
+  { name: "Spend time outside", emoji: "☀️", category: "Wellbeing" },
 ];
 
 const DEFAULT_CATEGORIES: Record<string, Category> = {
