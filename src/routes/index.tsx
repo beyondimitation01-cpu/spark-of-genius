@@ -231,6 +231,16 @@ function Index() {
     [categoryFilter, habits],
   );
 
+  // Quick-pick presets, optionally narrowed by the search field (searches across all categories)
+  const visiblePresets = useMemo(() => {
+    const query = presetSearch.trim().toLowerCase();
+    return HABIT_PRESETS.filter(
+      (p) =>
+        (query ? p.name.toLowerCase().includes(query) : p.category === category) &&
+        !habits.some((h) => h.name.toLowerCase() === p.name.toLowerCase()),
+    );
+  }, [category, presetSearch, habits]);
+
   // Stats: last 7 days, per-habit streaks, and 4-week completion rate
   const weeklyData = useMemo(
     () =>
